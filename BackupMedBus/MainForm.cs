@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -20,17 +22,33 @@ namespace BackupMedBus
         {
             InitializeComponent();
         }
-
+        private bool IsProcessOpen(string name)
+        {
+            var list = Process.GetProcessesByName(name);
+            if (list.Count() > 0)
+            {
+                return true;
+            }
+            return false;
+        }
         private void button1_Click(object sender, EventArgs e)
         {
+            var exetoTest = ConfigurationManager.AppSettings["exeToTest"];
+            if (IsProcessOpen(exetoTest))
+            {
+                MessageBox.Show(string.Format("Close the program {0} first to start backup", ConfigurationManager.AppSettings["ProgramName"]), "Message", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+
             List<DriveInfo> driveToBackup = new List<DriveInfo>();
             var usbDrive = System.IO.DriveInfo.GetDrives()
-                .Where(a => a.DriveType == System.IO.DriveType.Fixed).ToList();
+                .Where(a => a.DriveType == System.IO.DriveType.Removable).ToList();
             if (usbDrive.Count > 0)
             {
                 foreach (var item in usbDrive)
                 {
-                    if (MessageBox.Show("Do you want to backup also in " + item.ToString(), "Question", MessageBoxButtons.YesNo)
+                    if (MessageBox.Show("Do you want to backup also in " + item.ToString(), "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                         == DialogResult.Yes)
                     {
                         driveToBackup.Add(item);
