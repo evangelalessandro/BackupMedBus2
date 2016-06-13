@@ -108,6 +108,7 @@
     <Content Include="Lib\HoboCopy.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\Report.png" />
     <None Include="Resources\yellow.png" />
     <None Include="Resources\Red.png" />
     <None Include="Resources\green.png" />
