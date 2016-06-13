@@ -77,8 +77,9 @@
             this.Controls.Add(this.imgProgress);
             this.Controls.Add(this.RtbboxLog);
             this.Controls.Add(this.button1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
-            this.Text = "Form1";
+            this.Text = "Application for backup";
             ((System.ComponentModel.ISupportInitialize)(this.imgProgress)).EndInit();
             this.ResumeLayout(false);
 
