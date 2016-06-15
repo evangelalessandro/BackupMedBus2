@@ -13,11 +13,10 @@ namespace BackupMedBus
     {
         public event EventHandler<LogEventArgs> Log;
 
-        public void MakeNewBackup(List<DriveInfo> driveToBackup )
+        public void MakeNewBackup(List<DriveInfo> driveToBackup)
         {
             string sourceFolder = CheckDirectory(
                 ConfigurationManager.AppSettings["SourceDirectory"]);
-
 
             string destination01 = CheckDirectory(
                 ConfigurationManager.AppSettings["Destination01"]);
@@ -28,14 +27,12 @@ namespace BackupMedBus
             var prefixFolder = "";
             if (!string.IsNullOrEmpty(formatDataFolderName))
             {
-
                 prefixFolder = DateTime.Now.ToString(formatDataFolderName)
                      + @"\";
 
                 Log(this,
                 new LogEventArgs
-                ("Prefix folder Name " + prefixFolder,LogEventArgs.LogWarning.Info));
-
+                ("Prefix folder Name " + prefixFolder, LogEventArgs.LogWarning.Info));
             }
 
             string destination02 = CheckDirectory(
@@ -46,7 +43,7 @@ namespace BackupMedBus
 
             if (prefixFolder.Length > 0)
             {
-                Copia(driveToBackup, sourceFolder, destination01, @"LastCopy\" , destination02, destination03);
+                Copia(driveToBackup, sourceFolder, destination01, @"LastCopy\", destination02, destination03);
                 Copia(driveToBackup, sourceFolder, destination01, prefixFolder, destination02, destination03);
             }
             else
@@ -64,7 +61,6 @@ namespace BackupMedBus
             }
             if (destination03.Length > 0)
             {
-
                 Esegui(sourceFolder, destination03 + prefixFolder);
             }
             foreach (var item in driveToBackup)
@@ -93,8 +89,8 @@ namespace BackupMedBus
                 return;
             }
             CopyAll(sourceFolder, destination);
-
         }
+
         //For this, we can use any 3rd party tool.Hobocopy is one of them.It will start the two services automatically when needed, and the Volume Shadow Copy service will be turned back off after it's done.
         //Download Link: https://github.com/candera/hobocopy/downloads
 
@@ -127,12 +123,13 @@ namespace BackupMedBus
             //    + " " +  destination + " /E /S";
             //process.Start();
         }
+
         private void CopyAll(string SourcePath, string DestinationPath)
         {
             string[] directories = System.IO.Directory.GetDirectories(SourcePath, "*.*", SearchOption.AllDirectories);
             Log(this,
                 new LogEventArgs
-                ("Copy " + SourcePath + " to " + DestinationPath,LogEventArgs.LogWarning.Ok));
+                ("Copy " + SourcePath + " to " + DestinationPath, LogEventArgs.LogWarning.Ok));
 
             Log(this,
                 new LogEventArgs
@@ -144,7 +141,7 @@ namespace BackupMedBus
 
                 Log(this,
                 new LogEventArgs
-                ("Create dir " + dirPath.Replace(SourcePath, ""),LogEventArgs.LogWarning.Ok));
+                ("Create dir " + dirPath.Replace(SourcePath, ""), LogEventArgs.LogWarning.Ok));
 
                 Directory.CreateDirectory(dirName);
             };
@@ -165,15 +162,10 @@ namespace BackupMedBus
             Log(this,
                 new LogEventArgs
                 (" OK -------------------------------", LogEventArgs.LogWarning.Info));
-
         }
+
         public void Dispose()
         {
         }
-
     }
-
-
-
-
 }
