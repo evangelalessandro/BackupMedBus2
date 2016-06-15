@@ -134,5 +134,20 @@ namespace BackupMedBus
         {
             imgProgress.Image = Properties.Resources.green;
         }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            string dir = ConfigurationManager.AppSettings["SourceDirectory"].ToString();
+
+            using (var loadDb=new Report.LoadFromDatabases())
+            {
+                loadDb.ReadTables(dir);
+            }
+        }
     }
 }
