@@ -49,19 +49,19 @@ namespace BackupMedBus
             var color = Color.Black;
             switch (value.State)
             {
-                case LogEventArgs.LogWarning.Info:
+                case LogWarning.Info:
                     color = Color.Black;
                     break;
 
-                case LogEventArgs.LogWarning.Ok:
+                case LogWarning.Ok:
                     color = Color.Blue;
                     break;
 
-                case LogEventArgs.LogWarning.Warning:
+                case LogWarning.Warning:
                     color = Color.Orange;
                     break;
 
-                case LogEventArgs.LogWarning.Error:
+                case LogWarning.Error:
                     color = Color.Red;
                     break;
 
@@ -118,11 +118,11 @@ namespace BackupMedBus
             {
                 AppendTextBox(
                     new LogEventArgs(
-                        ex.Message + " " + ex.StackTrace.ToString(), LogEventArgs.LogWarning.Error));
+                        ex.Message + " " + ex.StackTrace.ToString(), LogWarning.Error));
 
                 AppendTextBox(
                 new LogEventArgs(
-                    "----- Error --------------------", LogEventArgs.LogWarning.Error));
+                    "----- Error --------------------", LogWarning.Error));
                 imgProgress.Image = Properties.Resources.Red;
             }
             finally
@@ -154,11 +154,11 @@ namespace BackupMedBus
             {
                 AppendTextBox(
                     new LogEventArgs(
-                        ex.Message + " " + ex.StackTrace.ToString(), LogEventArgs.LogWarning.Error));
+                        ex.Message + " " + ex.StackTrace.ToString(), LogWarning.Error));
 
                 AppendTextBox(
                 new LogEventArgs(
-                    "----- Error --------------------", LogEventArgs.LogWarning.Error));
+                    "----- Error --------------------", LogWarning.Error));
                 imgProgress.Image = Properties.Resources.yellow;
             }
             finally
