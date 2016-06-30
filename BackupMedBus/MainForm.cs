@@ -118,11 +118,12 @@ namespace BackupMedBus
             {
                 AppendTextBox(
                     new LogEventArgs(
-                        ex.Message + " " + ex.StackTrace.ToString(), LogWarning.Error));
+                        ex.ToDetailedString(), LogWarning.Error));
 
                 AppendTextBox(
                 new LogEventArgs(
                     "----- Error --------------------", LogWarning.Error));
+
                 imgProgress.Image = Properties.Resources.Red;
             }
             finally
@@ -154,11 +155,12 @@ namespace BackupMedBus
             {
                 AppendTextBox(
                     new LogEventArgs(
-                        ex.Message + " " + ex.StackTrace.ToString(), LogWarning.Error));
+                        ex.ToDetailedString(), LogWarning.Error));
 
                 AppendTextBox(
                 new LogEventArgs(
                     "----- Error --------------------", LogWarning.Error));
+
                 imgProgress.Image = Properties.Resources.yellow;
             }
             finally

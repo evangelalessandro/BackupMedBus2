@@ -88,6 +88,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class\ExceptionExtensions.cs" />
     <Compile Include="Class\LogWarning.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
