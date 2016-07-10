@@ -142,12 +142,14 @@ namespace BackupMedBus
             Cursor.Current = Cursors.WaitCursor;
             try
             {
-                string dir = ConfigurationManager.AppSettings["SourceDirectory"].ToString();
+                string sqlConnectionString = ConfigurationManager.AppSettings["MysqlConnection"].ToString();
+                var prefixTable = ConfigurationManager.AppSettings["PrefixTableMysqlConnection"].ToString();
+                sqlConnectionString = string.Format(sqlConnectionString, prefixTable + "fmf_patients");
 
                 using (var loadDb = new Report.LoadFromDatabases())
                 {
                     loadDb.Log += Newbackup_Log;
-                    loadDb.ReadTables(dir);
+                    loadDb.ReadTables(sqlConnectionString, prefixTable);
                 }
                 imgProgress.Image = Properties.Resources.green;
             }

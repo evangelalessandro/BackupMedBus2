@@ -1,8 +1,8 @@
 ﻿using BackupMedBus.Report.PatientDb;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 
@@ -22,19 +22,19 @@ namespace BackupMedBus.Report
         {
         }
 
-        public void ReadTables(string directoryMain)
+        public void ReadTables(string connectionString, string prefixTable)
         {
             var patientList = new List<PatientDb.Patient>();
-            string fullPath = Path.Combine(directoryMain, @"databases\patients\patients.db");
-            string selectSQL = "SELECT * FROM PATIENT_IDENTITY";
-            using (SQLiteDataReader dataReader = getDataReader(fullPath, selectSQL))
+
+            string selectSQL = "SELECT * FROM " + prefixTable + "fmf_patients.PATIENT_IDENTITY WHERE IDENT_ISACTIVE=1 ";
+            using (var dataReader
+                = getDataReader(connectionString, selectSQL))
             {
                 ReadPatientData(dataReader, patientList);
             }
 
-            fullPath = Path.Combine(directoryMain, @"databases\episodes\episodes.db");
-            selectSQL = "SELECT * FROM EPISODES";
-            using (SQLiteDataReader dataReader = getDataReader(fullPath, selectSQL))
+            selectSQL = "SELECT * FROM " + prefixTable + "fmf_episodes.EPISODES";
+            using (var dataReader = getDataReader(connectionString, selectSQL))
             {
                 ReadEpisodesData(dataReader, patientList);
             }
@@ -95,34 +95,38 @@ namespace BackupMedBus.Report
 
         #region Private Methods
 
-        private SQLiteDataReader getDataReader(string directoryMain, string selectSQL)
+        private MySqlDataReader getDataReader(string connectionString, string selectSQL)
         {
-            SQLiteConnection conread =
-                new SQLiteConnection("Data Source=" + directoryMain);
+            var conread =
+                new MySqlConnection(connectionString);
             {
                 conread.Open();
-                using (SQLiteCommand selectCommand = new SQLiteCommand(selectSQL, conread))
+                using (var selectCommand = new MySqlCommand(selectSQL, conread))
                 {
                     return selectCommand.ExecuteReader();
                 }
             }
         }
 
-        private void ReadEpisodesData(SQLiteDataReader dataReader, List<PatientDb.Patient> patientList)
+        private void ReadEpisodesData(MySqlDataReader dataReader, List<PatientDb.Patient> patientList)
         {
             while (dataReader.Read())
             {
                 if (dataReader["PATIENT_UID"] != DBNull.Value)
                 {
-                    var itemPatient = patientList.Where(a => a.Uid == new Guid(dataReader["PATIENT_UID"].ToString())).First();
-                    itemPatient.Episodes.Add(
-                        new Episode()
-                        { Data = ((DateTime)dataReader["DATECREATION"]).Date });
+                    var itemPatient = patientList.Where(a => a.Uid == new Guid(dataReader["PATIENT_UID"].ToString())).FirstOrDefault();
+
+                    if (itemPatient != null)
+                    {
+                        itemPatient.Episodes.Add(
+                            new Episode()
+                            { Data = ((DateTime)dataReader["DATECREATION"]).Date });
+                    }
                 }
             }
         }
 
-        private void ReadPatientData(SQLiteDataReader dataReader, List<PatientDb.Patient> patientList)
+        private void ReadPatientData(MySqlDataReader dataReader, List<PatientDb.Patient> patientList)
         {
             while (dataReader.Read())
             {
