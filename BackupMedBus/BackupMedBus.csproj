@@ -128,9 +128,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Database_Cloud.ico" />
-    <Content Include="Lib\HoboCopy.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Resources\Report.png" />
     <None Include="Resources\yellow.png" />
     <None Include="Resources\Red.png" />
